@@ -1,131 +1,114 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup>
-		<AppName>Resonite</AppName>
-		<ModLoaderShort>rml</ModLoaderShort>
-
-		<Product>HeadlessTweaks</Product>
-		<Version>2.1.2</Version>
-
-		<Company>badhaloninja</Company>
-		<Copyright>Copyright © $(Company) 2024</Copyright>
-
-		<Authors>$(Company)</Authors>
-		<AssemblyTitle>$(Product)</AssemblyTitle>
-		<AssemblyName>$(Product)</AssemblyName>
-
-		<RootNamespace>HeadlessTweaks</RootNamespace>
-		<ProjectGuid>{9911CEC5-63C1-4583-853C-7FBC40D131C9}</ProjectGuid>
-	</PropertyGroup>
-
-	<PropertyGroup>
-		<OutputType>Library</OutputType>
-		<AppDesignerFolder>Properties</AppDesignerFolder>
-		<TargetFramework>net472</TargetFramework>
-		<LangVersion>preview</LangVersion>
-		<FileAlignment>512</FileAlignment>
-		<Deterministic>true</Deterministic>
-	</PropertyGroup>
-	
-	<PropertyGroup>
-		<CopyLocal>false</CopyLocal>
-		<CopyToMods Condition="'$(CopyToMods)'==''">true</CopyToMods>
-		<CopyDiscordToLib Condition="'$(CopyToMods)'=='true'">true</CopyDiscordToLib>
-
-		<DebugSymbols Condition="'$(Configuration)'=='Release'">false</DebugSymbols>
-		<DebugType Condition="'$(Configuration)'=='Release'">None</DebugType>
-	</PropertyGroup>
-
-	<ItemGroup>
-		<None Include="..\README.md" Link="README.md" />
-		<None Include="..\LICENCE" Link="LICENCE" />
-	</ItemGroup>
-
-	<PropertyGroup>
-		<AppPath>$(MSBuildThisFileDirectory)$(AppName)\</AppPath>
-		<AppPath Condition="Exists('F:\Windows\')">F:\Windows\</AppPath>
-		<AppPath Condition="Exists('E:\SteamLibrary\steamapps\common\$(AppName)')">E:\SteamLibrary\steamapps\common\$(AppName)\</AppPath>
-		<AppPath Condition="Exists('C:\Program Files (x86)\Steam\steamapps\common\$(AppName)\')">C:\Program Files (x86)\Steam\steamapps\common\$(AppName)\</AppPath>
-
-		<HeadlessPath>$(MSBuildThisFileDirectory)$(AppName)\Headless\</HeadlessPath>
-		<HeadlessPath Condition="Exists('$(AppPath)Headless\')">$(AppPath)Headless\</HeadlessPath>
-		<HeadlessPath Condition="Exists('$(AppPath)Tools\Headless\')">$(AppPath)Tools\Headless\</HeadlessPath>
-
-		<AppData Condition="Exists('$(AppPath)$(AppName)_Data')">$(AppPath)$(AppName)_Data\Managed\</AppData>
-		<HeadlessData>$(HeadlessPath)</HeadlessData>
-		<HeadlessData Condition="Exists('$(HeadlessPath)$(AppName)_Data')">$(HeadlessPath)$(AppName)_Data\Managed\</HeadlessData>
-
-		<ModLibrariesPath>$(HeadlessPath)$(ModLoaderShort)_libs\</ModLibrariesPath>
-		<ModsPath>$(HeadlessPath)$(ModLoaderShort)_mods\</ModsPath>
-	</PropertyGroup>
-
-	<ItemGroup>
-		<!-- Referencing Webhook will also reference Core and Rest -->
-		<PackageReference Include="Discord.Net.Webhook" Version="3.12.0" />
-		<!-- These packages are to make sure the Discord.Net packages don't force a lower version of the System binaries that the platform uses -->
-		<!-- Will probably need to manually update these -->
-		<PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="7.0.0" />
-		<PackageReference Include="System.Memory" Version="4.5.5" />
-		<PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0" />
-		<PackageReference Include="System.ValueTuple" Version="4.5.0" />
-		<PackageReference Include="System.Collections.Immutable" Version="8.0.0" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Reference Include="HarmonyLib">
-			<HintPath>$(HeadlessPath)$(ModLoaderShort)_libs\0Harmony.dll</HintPath>
-			<HintPath Condition="Exists('$(HeadlessPath)0Harmony.dll')">$(HeadlessPath)0Harmony.dll</HintPath>
-		</Reference>
-		<Reference Include="Elements.Core">
-			<HintPath>$(HeadlessData)Elements.Core.dll</HintPath>
-		</Reference>
-		<Reference Include="SkyFrost.Base">
-			<HintPath>$(HeadlessData)SkyFrost.Base.dll</HintPath>
-		</Reference>
-		<Reference Include="FrooxEngine">
-			<HintPath>$(HeadlessData)FrooxEngine.dll</HintPath>
-		</Reference>
-		<Reference Include="FrooxEngine.Store">
-			<HintPath>$(HeadlessData)FrooxEngine.Store.dll</HintPath>
-		</Reference>
-		<Reference Include="Elements.Assets">
-			<HintPath>$(HeadlessData)Elements.Assets.dll</HintPath>
-		</Reference>
-		<Reference Include="Elements.Quantity">
-			<HintPath>$(HeadlessData)Elements.Quantity.dll</HintPath>
-		</Reference>
-		<Reference Include="$(AppName)">
-			<HintPath>$(HeadlessPath)\$(AppName).exe</HintPath>
-		</Reference>
-		<Reference Include="$(AppName)ModLoader">
-			<HintPath>$(HeadlessPath)$(AppName)ModLoader.dll</HintPath>
-			<HintPath Condition="Exists('$(HeadlessPath)Libraries\$(AppName)ModLoader.dll')">$(HeadlessPath)Libraries\$(AppName)ModLoader.dll</HintPath>
-		</Reference>
-
-		<Reference Include="Newtonsoft.Json">
-			<HintPath>$(HeadlessPath)\Newtonsoft.Json.dll</HintPath>
-		</Reference>
-
-		<Reference Include="System.Buffers">
-			<HintPath>$(HeadlessPath)\System.Buffers.dll</HintPath>
-		</Reference>
-		<!-- <Reference Include="System.Collections.Immutable">
+﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
+  <PropertyGroup>
+    <AppName>Resonite</AppName>
+    <ModLoaderShort>rml</ModLoaderShort>
+    <Product>HeadlessTweaks</Product>
+    <Version>2.1.2</Version>
+    <Company>badhaloninja</Company>
+    <Copyright>Copyright © $(Company) 2024</Copyright>
+    <Authors>$(Company)</Authors>
+    <AssemblyTitle>$(Product)</AssemblyTitle>
+    <AssemblyName>$(Product)</AssemblyName>
+    <RootNamespace>HeadlessTweaks</RootNamespace>
+    <ProjectGuid>{9911CEC5-63C1-4583-853C-7FBC40D131C9}</ProjectGuid>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <TargetFramework>net9.0</TargetFramework>
+    <LangVersion>preview</LangVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup>
+    <CopyLocal>false</CopyLocal>
+    <CopyToMods Condition="'$(CopyToMods)'==''">true</CopyToMods>
+    <CopyDiscordToLib Condition="'$(CopyToMods)'=='true'">true</CopyDiscordToLib>
+    <DebugSymbols Condition="'$(Configuration)'=='Release'">false</DebugSymbols>
+    <DebugType Condition="'$(Configuration)'=='Release'">None</DebugType>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="..\README.md" Link="README.md" />
+    <None Include="..\LICENCE" Link="LICENCE" />
+  </ItemGroup>
+  <PropertyGroup>
+    <AppPath>$(MSBuildThisFileDirectory)$(AppName)\</AppPath>
+    <AppPath Condition="Exists('F:\Windows\')">F:\Windows\</AppPath>
+    <AppPath Condition="Exists('E:\SteamLibrary\steamapps\common\$(AppName)')">E:\SteamLibrary\steamapps\common\$(AppName)\</AppPath>
+    <AppPath Condition="Exists('C:\Program Files (x86)\Steam\steamapps\common\$(AppName)\')">C:\Program Files (x86)\Steam\steamapps\common\$(AppName)\</AppPath>
+    <HeadlessPath>$(MSBuildThisFileDirectory)$(AppName)\Headless\</HeadlessPath>
+    <HeadlessPath Condition="Exists('$(AppPath)Headless\')">$(AppPath)Headless\</HeadlessPath>
+    <HeadlessPath Condition="Exists('$(AppPath)Tools\Headless\')">$(AppPath)Tools\Headless\</HeadlessPath>
+    <AppData Condition="Exists('$(AppPath)$(AppName)_Data')">$(AppPath)$(AppName)_Data\Managed\</AppData>
+    <HeadlessData>$(HeadlessPath)</HeadlessData>
+    <HeadlessData Condition="Exists('$(HeadlessPath)$(AppName)_Data')">$(HeadlessPath)$(AppName)_Data\Managed\</HeadlessData>
+    <ModLibrariesPath>$(HeadlessPath)$(ModLoaderShort)_libs\</ModLibrariesPath>
+    <ModsPath>$(HeadlessPath)$(ModLoaderShort)_mods\</ModsPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- Referencing Webhook will also reference Core and Rest -->
+    <PackageReference Include="Discord.Net.Webhook" Version="3.12.0" />
+    <!-- These packages are to make sure the Discord.Net packages don't force a lower version of the System binaries that the platform uses -->
+    <!-- Will probably need to manually update these -->
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="7.0.0" />
+    <PackageReference Include="System.Memory" Version="4.5.5" />
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0" />
+    <PackageReference Include="System.ValueTuple" Version="4.5.0" />
+    <PackageReference Include="System.Collections.Immutable" Version="8.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="HarmonyLib">
+      <HintPath>$(HeadlessPath)$(ModLoaderShort)_libs\0Harmony.dll</HintPath>
+      <HintPath Condition="Exists('$(HeadlessPath)0Harmony.dll')">$(HeadlessPath)0Harmony.dll</HintPath>
+    </Reference>
+    <Reference Include="Elements.Core">
+      <HintPath>$(HeadlessData)Elements.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="SkyFrost.Base">
+      <HintPath>$(HeadlessData)SkyFrost.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="SkyFrost.Base.Models">
+      <HintPath>$(HeadlessData)SkyFrost.Base.Models.dll</HintPath>
+    </Reference>
+    <Reference Include="FrooxEngine">
+      <HintPath>$(HeadlessData)FrooxEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="FrooxEngine.Store">
+      <HintPath>$(HeadlessData)FrooxEngine.Store.dll</HintPath>
+    </Reference>
+    <Reference Include="Elements.Assets">
+      <HintPath>$(HeadlessData)Elements.Assets.dll</HintPath>
+    </Reference>
+    <Reference Include="Elements.Quantity">
+      <HintPath>$(HeadlessData)Elements.Quantity.dll</HintPath>
+    </Reference>
+    <Reference Include="$(AppName)">
+      <HintPath>$(HeadlessPath)\$(AppName).dll</HintPath>
+    </Reference>
+    <Reference Include="$(AppName)ModLoader">
+      <HintPath>$(HeadlessPath)$(AppName)ModLoader.dll</HintPath>
+      <HintPath Condition="Exists('$(HeadlessPath)Libraries\$(AppName)ModLoader.dll')">$(HeadlessPath)Libraries\$(AppName)ModLoader.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>$(HeadlessPath)\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Buffers">
+      <HintPath>$(HeadlessPath)\System.Buffers.dll</HintPath>
+    </Reference>
+    <!-- <Reference Include="System.Collections.Immutable">
 			<HintPath>$(HeadlessPath)\System.Collections.Immutable.dll</HintPath>
 		</Reference> -->
-		<Reference Include="System.Numerics.Vectors">
-			<HintPath>$(HeadlessPath)\System.Numerics.Vectors.dll</HintPath>
-		</Reference>
-		<Reference Include="System.Threading.Tasks.Extensions">
-			<HintPath>$(HeadlessPath)\System.Threading.Tasks.Extensions.dll</HintPath>
-		</Reference>
-	</ItemGroup>
-
-
-	<Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(CopyToMods)'=='true'">
-		<Copy SourceFiles="$(TargetPath)" DestinationFolder="$(ModsPath)" />
-		<Message Text="Copied $(TargetFileName) to $(ModsPath)" Importance="high" />
-
-
-		<Copy SourceFiles="$(TargetDir)Discord.Net.Core.dll;$(TargetDir)Discord.Net.Rest.dll;$(TargetDir)Discord.Net.Webhook.dll;" DestinationFolder="$(ModLibrariesPath)" Condition="'$(CopyDiscordToLib)'=='true'" />
-		<Message Text="Copied Discord.Net libraries to $(ModLibrariesPath)" Importance="high" Condition="'$(CopyDiscordToLib)'=='true'" />
-	</Target>
+    <Reference Include="System.Numerics.Vectors">
+      <HintPath>$(HeadlessPath)\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions">
+      <HintPath>$(HeadlessPath)\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(CopyToMods)'=='true'">
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(ModsPath)" />
+    <Message Text="Copied $(TargetFileName) to $(ModsPath)" Importance="high" />
+    <Copy SourceFiles="$(TargetDir)Discord.Net.Core.dll;$(TargetDir)Discord.Net.Rest.dll;$(TargetDir)Discord.Net.Webhook.dll;" DestinationFolder="$(ModLibrariesPath)" Condition="'$(CopyDiscordToLib)'=='true'" />
+    <Message Text="Copied Discord.Net libraries to $(ModLibrariesPath)" Importance="high" Condition="'$(CopyDiscordToLib)'=='true'" />
+  </Target>
 </Project>
